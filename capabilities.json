@@ -1,0 +1,46 @@
+{
+    "dataRoles": [{
+            "name": "name",
+            "kind": "GroupingOrMeasure",
+            "displayName": "Name"
+        },
+        {
+            "name": "value",
+            "kind": "GroupingOrMeasure",
+            "displayName": "Value"
+        },
+        {
+            "name": "period",
+            "kind": "GroupingOrMeasure",
+            "displayName": "Period"
+        }
+    ],
+    "dataViewMappings": [{
+        "table": {
+            "rows": {
+                "dataReductionAlgorithm": {
+                    "top": {
+                        "count": 30000
+                    }
+                },
+                "select": [
+                    {
+                        "for": {
+                            "in": "name"
+                        }
+                    },
+                    {
+                        "for": {
+                            "in": "value"
+                        }
+                    }, {
+                        "for": {
+                            "in": "period"
+                        }
+                    }
+                ]
+            }
+        }
+    }],
+    "privileges": []
+}
