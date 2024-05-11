@@ -19,7 +19,7 @@ export class Visual implements IVisual {
 
     public update(options: VisualUpdateOptions): void {
         this.container.selectAll("*").remove();
-        
+
         // SVG'nin boyutlarını ayarlayın.
         let width = options.viewport.width;
         let height = options.viewport.height;
@@ -36,7 +36,6 @@ export class Visual implements IVisual {
             values.push(row[1])
             periods.push(row[2])
         })
-
 
         // En küçük periyodu bulun
         let minPeriod = Math.min(...periods);
@@ -55,6 +54,9 @@ export class Visual implements IVisual {
         }).filter(d => d !== undefined);
 
         let groupedData = Array.from(d3.group(filteredData, (d: { category: any; value: any; }) => d.category), ([key, value]) => ({ key, value: d3.sum(value, (d: { category: any; value: any; }) => d.value) }));
+
+        // Toplam değeri hesaplayın
+        let totalValue = d3.sum(groupedData, (d: { value: any; }) => d.value);
 
         // Treemap düzenini oluşturun.
         let treemap = d3.treemap()
@@ -96,6 +98,12 @@ export class Visual implements IVisual {
             .attr("y", (d: any) => d.y1 - 5) // 5 piksel yukarı kaydır
             .text((d: any) => d.data.value); // Değer
 
+        nodes.append("text")
+            .attr("x", (d: any) => (d.x0 + d.x1) / 2) // X koordinatını düğümün ortasına ayarla
+            .attr("y", (d: any) => (d.y0 + d.y1) / 2) // Y koordinatını düğümün ortasına ayarla
+            .attr("text-anchor", "middle") // Metni ortala
+            .style("font-weight", "bold") // Metni kalın yap
+            .text((d: any) => `(${(d.data.value / totalValue * 100).toFixed(1)}%)`); // Yüzde
 
     }
 }
