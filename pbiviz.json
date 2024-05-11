@@ -1,11 +1,11 @@
 {
     "visual": {
-        "name": "bubbleChartDemoNako",
-        "displayName": "bubbleChartDemoNako",
-        "guid": "bubbleChartDemoNakoE5953886CB324BA8A48EEBC8A24595FE",
+        "name": "periodlyTreeMapDemoNako",
+        "displayName": "periodlyTreeMapDemoNako",
+        "guid": "periodlyTreeMapDemoNakoE5953886CB324BA8A48EEBC8A24595FE",
         "visualClassName": "Visual",
         "version": "1.0.0.0",
-        "description": "Bubble Chart Project For Demo Development. Takes 2 value as input which is name and value. Scale and show them as bubble.",
+        "description": "Periodly Tree Map Project For Demo Development. Takes 3 value as input which is name, value and year. Scale and show them as tree map.",
         "supportUrl": "ikbal.yakupoglu@ogr.sakarya.edu.tr",
         "gitHubUrl": ""
     },
