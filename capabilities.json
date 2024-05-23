@@ -15,6 +15,31 @@
             "displayName": "Period"
         }
     ],
+    "objects": {
+        "chartSettings": {
+            "displayName": "Custom Settings",
+            "properties": {
+                "config": {
+                    "type": {
+                        "text": true
+                    }
+                }
+            }
+        },
+        "displaySettings": {
+            "displayName": "Animated Chart Settings",
+            "properties": {
+                "duration": {
+                    "type": {
+                        "integer": true
+                    }
+                }
+            }
+        }
+    },
+    "sorting": {
+        "default": {}
+    },
     "dataViewMappings": [{
         "table": {
             "rows": {
@@ -23,8 +48,7 @@
                         "count": 30000
                     }
                 },
-                "select": [
-                    {
+                "select": [{
                         "for": {
                             "in": "name"
                         }
