@@ -16,22 +16,12 @@
         }
     ],
     "objects": {
-        "chartSettings": {
-            "displayName": "Custom Settings",
-            "properties": {
-                "config": {
-                    "type": {
-                        "text": true
-                    }
-                }
-            }
-        },
         "displaySettings": {
             "displayName": "Animated Chart Settings",
             "properties": {
                 "duration": {
                     "type": {
-                        "integer": true
+                        "numeric": true
                     }
                 }
             }
