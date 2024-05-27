@@ -48,25 +48,25 @@ export class Visual implements IVisual {
         let uniquePeriods = Array.from(new Set(periods)).sort((a, b) => a - b);
 
         // Sadece seçilen periyodun verilerini alın
-        let filteredData = (period: any) => names.map((category: any, i: number) => {
+        let filteredData = (period: any) => names.map((name: any, i: number) => {
             if (periods[i] === period) {
                 return {
-                    category: category,
+                    name: name,
                     value: values[i]
                 };
             }
         }).filter(d => d !== undefined);
 
         let createTreemap = (data: any) => {
-            let groupedData = Array.from(d3.group(data, (d: { category: any; value: any; }) => d.category), ([key, value]) => ({ key, value: d3.sum(value, (d: { category: any; value: any; }) => d.value) }));
+            let groupedData = Array.from(d3.group
+                (data, (d: { name: any; value: any; }) => d.name),
+                ([key, value]) =>
+                ({
+                    key, value: d3.sum(value, (d: { name: any; value: any; }) => d.value)
+                }));
 
             // En büyük değere sahip kategoriyi bul
             groupedData.sort((a, b) => b.value - a.value);
-
-            // En büyük kategoriyi listenin başına taşı
-            let maxCategoryIndex = groupedData.findIndex(item => item.value === groupedData[0].value);
-            let maxCategory = groupedData.splice(maxCategoryIndex, 1)[0];
-            groupedData.unshift(maxCategory);
 
             // Toplam değeri hesaplayın
             let totalValue = d3.sum(groupedData, (d: { value: any; }) => d.value);
@@ -102,25 +102,28 @@ export class Visual implements IVisual {
                 .attr("width", (d: any) => d.x1 - d.x0)
                 .attr("height", (d: any) => d.y1 - d.y0);
 
+            // İsim
             enterNodes.append("text")
-                .attr("class", "category")
+                .attr("class", "name")
                 .attr("x", (d: any) => d.x0 + 5) // 5 piksel sağa kaydır
                 .attr("y", (d: any) => d.y0 + 20) // 20 piksel aşağı kaydır
-                .text((d: any) => d.data.key); // İsim
+                .text((d: any) => d.data.key);
 
+            // Değer
             enterNodes.append("text")
                 .attr("class", "value")
                 .attr("x", (d: any) => d.x0 + 5) // 5 piksel sağa kaydır
                 .attr("y", (d: any) => d.y1 - 5) // 5 piksel yukarı kaydır
-                .text((d: any) => d.data.value); // Değer
+                .text((d: any) => d.data.value);
 
+            // Yüzde
             enterNodes.append("text")
                 .attr("class", "percentage")
                 .attr("x", (d: any) => (d.x0 + d.x1) / 2) // X koordinatını düğümün ortasına ayarla
                 .attr("y", (d: any) => (d.y0 + d.y1) / 2) // Y koordinatını düğümün ortasına ayarla
                 .attr("text-anchor", "middle") // Metni ortala
                 .style("font-weight", "bold") // Metni kalın yap
-                .text((d: any) => `(${(d.data.value / totalValue * 100).toFixed(1)}%)`); // Yüzde
+                .text((d: any) => `(${(d.data.value / totalValue * 100).toFixed(1)}%)`);
 
             // Mevcut düğümleri güncelle
             nodes.select("rect")
@@ -130,7 +133,7 @@ export class Visual implements IVisual {
                 .attr("width", (d: any) => d.x1 - d.x0)
                 .attr("height", (d: any) => d.y1 - d.y0);
 
-            nodes.select("text.category")
+            nodes.select("text.name")
                 .transition().duration(800)
                 .attr("x", (d: any) => d.x0 + 5)
                 .attr("y", (d: any) => d.y0 + 20)
@@ -156,6 +159,7 @@ export class Visual implements IVisual {
                 let currentData = filteredData(currentPeriod);
                 createTreemap(currentData);
 
+                /* Otomatik olarak güncelleme için kod satırını açın (eklenti kullanmadan) */
                 // this.animationTimeout = window.setTimeout(() => {
                 //     animatePeriods(periods, index + 1);
                 // }, this.getDisplaySettingsFromMetaData("duration") || 3000); // 3 saniye bekle
@@ -164,15 +168,5 @@ export class Visual implements IVisual {
 
         // Otomatik animasyonu başlat
         animatePeriods(uniquePeriods);
-    }
-
-    public getDisplaySettingsFromMetaData(name: string) {
-        if (this.dv &&
-            this.dv.metadata &&
-            this.dv.metadata.objects &&
-            this.dv.metadata.objects.displaySettings &&
-            typeof this.dv.metadata.objects.displaySettings[name] !== "undefined") {
-            return this.dv.metadata.objects.displaySettings[name];
-        }
     }
 }
